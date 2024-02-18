@@ -16,7 +16,8 @@
     "dotenv": "^16.4.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
-    "prisma": "^5.8.1"
+    "prisma": "^5.8.1",
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "nodemon": "^3.0.3"
