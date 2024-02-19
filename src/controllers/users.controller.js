@@ -43,7 +43,11 @@ export class UsersController {
         
         user = await this.usersService.findUser(email)
         
-        await this.usersService.createUser(email, password, name, grade)
+        if (user) {
+          return res.status(400).json({success: false, message: "이미 존재하는 이메일입니다."})
+        }
+        
+        const createUser = await this.usersService.createUser(email, password, name, grade)
   
         return res.status(201).json({data: createUser}) // email, name, grade
       } else {
@@ -54,12 +58,15 @@ export class UsersController {
           return res.status(400).json({success: false, message: "이미 가입된 사용자입니다."})
         }
         
-        await this.usersService.createKaKaoUser(clientId, name, grade)
+        const createKaKaoUser = await this.usersService.createKaKaoUser(clientId, name, grade)
   
         return res.status(201).json({data: createKaKaoUser}) //name, grade
       };
 
-    } catch (error) {next()}
+    } catch (error) {
+      next();
+    }
+
   }
   // 로그인
   getUser = async (req, res, next) => {
@@ -83,7 +90,12 @@ export class UsersController {
         }
       
         user = await this.usersService.findEmailUser(email, password)      
+        
+        if (!user) {
+          return res.status(401).json({success: false, message: "이메일 또는 비밀번호가 정확하지 않습니다."})
+        }
       }
+
       // accessToken 발급
       const accessToken = jwt.sign({userId: user.userId}, process.env.ACCESS_TOKEN_KEY, {expiresIn: '12h'});
       const refreshToken = jwt.sign({userId: user.userId}, process.env.REFRESH_TOKEN_KEY, {expiresIn: '7d'});

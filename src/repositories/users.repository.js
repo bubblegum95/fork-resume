@@ -4,7 +4,7 @@ import sha256 from 'crypto-js/sha256.js';
 const prisma = new PrismaClient();
 
 export class UsersRepository {
-  findUser = async () => {
+  findUser = async (email) => {
     const user = await prisma.users.findFirst({
       where: {
         email,
@@ -14,7 +14,7 @@ export class UsersRepository {
     return user; 
   }
 
-  createUser = async () => {
+  createUser = async (email, password, name, grade) => {
     const user = await prisma.users.create({
       data: {
         email, 
@@ -27,7 +27,7 @@ export class UsersRepository {
     return user; 
   }
 
-  findKaKaoUser = async () => {
+  findKaKaoUser = async (clientId) => {
     const user = await prisma.users.findFirst({
       where: {
         clientId,
@@ -37,7 +37,7 @@ export class UsersRepository {
     return user
   }
 
-  createKaKaoUser = async () => {
+  createKaKaoUser = async (clientId, name, grade) => {
     const user = await prisma.users.create({
       data: {
         clientId,
@@ -49,7 +49,7 @@ export class UsersRepository {
     return user; 
   }
 
-  findEmailUser = async () => {
+  findEmailUser = async (email, password) => {
     const user = await prisma.users.findFirst({
       where: {
         email,
