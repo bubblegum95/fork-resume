@@ -19,7 +19,7 @@ describe('Resumes Repository Unit Test', () => {
   beforeEach(() => {
     jest.resetAllMocks(); // 모든 Mock을 초기화합니다.
   });
-
+  
   test('findResumes Method', async () => {
     const mockReturn = 'findMany String';
     mockPrisma.resumes.findMany.mockReturnValue(mockReturn);
