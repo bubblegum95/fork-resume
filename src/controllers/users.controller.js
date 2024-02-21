@@ -1,14 +1,18 @@
-import { UsersService } from '../services/users.service.js';
+//import { UsersService } from '../services/users.service.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 export class UsersController {
-  usersService = new UsersService;
+  //usersService = new UsersService;
+  constructor (usersService) {
+    this.usersService = usersService; 
+  }
   // 회원가입
   createUser = async (req, res, next) => {
     try {
+      console.log(1)
       const {email, clientId, password, passwordConfirm, name, grade} = req.body;
       // 권한 부여
       if(grade && !['NORMAL', 'ADMIN'].includes(grade)) {
@@ -40,19 +44,19 @@ export class UsersController {
         if (password !== passwordConfirm) {
           return res.status(400).json({success: false, message: "비밀번호가 일치하지 않습니다."})
         } 
-        
-        user = await this.usersService.findUser(email)
-        
+
+        const user = await this.usersService.findUser(email)
+
         if (user) {
           return res.status(400).json({success: false, message: "이미 존재하는 이메일입니다."})
         }
         
         const createUser = await this.usersService.createUser(email, password, name, grade)
-  
+
         return res.status(201).json({data: createUser}) // email, name, grade
       } else {
         // clientId (카카오)로 회원가입
-        user = await this.usersService.findKaKaoUser(clientId)
+        const user = await this.usersService.findKaKaoUser(clientId)
         
         if(user){
           return res.status(400).json({success: false, message: "이미 가입된 사용자입니다."})
@@ -64,7 +68,7 @@ export class UsersController {
       };
 
     } catch (error) {
-      next();
+      next(error);
     }
 
   }
@@ -90,21 +94,24 @@ export class UsersController {
         }
       
         user = await this.usersService.findEmailUser(email, password)      
-        
+
         if (!user) {
           return res.status(401).json({success: false, message: "이메일 또는 비밀번호가 정확하지 않습니다."})
         }
       }
-
       // accessToken 발급
       const accessToken = jwt.sign({userId: user.userId}, process.env.ACCESS_TOKEN_KEY, {expiresIn: '12h'});
       const refreshToken = jwt.sign({userId: user.userId}, process.env.REFRESH_TOKEN_KEY, {expiresIn: '7d'});
+      
+      res.cookie("authorization",`Bearer ${accessToken}`);
+      console.log(accessToken); 
       return res.json({
         accessToken,
         refreshToken,
+
       })
     } catch (error) {
-      next();
+      next(error);
     }
     
   }
@@ -120,7 +127,7 @@ export class UsersController {
         grade: user.grade,
       })
     } catch (error) {
-      next(); 
+      next(error); 
     }
   }
 

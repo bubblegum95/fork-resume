@@ -1,21 +1,26 @@
-import {PrismaClient} from '@prisma/client';
+//import {PrismaClient} from '@prisma/client';
 import sha256 from 'crypto-js/sha256.js';
 
-const prisma = new PrismaClient();
+//const prisma = new PrismaClient();
 
 export class UsersRepository {
+  constructor(prisma) {
+    this.prisma = prisma;
+  }
+
+
   findUser = async (email) => {
-    const user = await prisma.users.findFirst({
+    const user = await this.prisma.users.findFirst({
       where: {
         email,
-      }
+      } 
     });
 
-    return user; 
+    return user;    
   }
 
   createUser = async (email, password, name, grade) => {
-    const user = await prisma.users.create({
+    const user = await this.prisma.users.create({
       data: {
         email, 
         password: sha256(password).toString(), 
@@ -28,7 +33,7 @@ export class UsersRepository {
   }
 
   findKaKaoUser = async (clientId) => {
-    const user = await prisma.users.findFirst({
+    const user = await this.prisma.users.findFirst({
       where: {
         clientId,
       }
@@ -38,7 +43,7 @@ export class UsersRepository {
   }
 
   createKaKaoUser = async (clientId, name, grade) => {
-    const user = await prisma.users.create({
+    const user = await this.prisma.users.create({
       data: {
         clientId,
         name,
@@ -50,7 +55,7 @@ export class UsersRepository {
   }
 
   findEmailUser = async (email, password) => {
-    const user = await prisma.users.findFirst({
+    const user = await this.prisma.users.findFirst({
       where: {
         email,
         password: sha256(password).toString(),

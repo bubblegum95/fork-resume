@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import userRouter from './src/routers/users.router.js';
 import resumeRouter from './src/routers/resumes.router.js';
 import authRouter from './src/routers/auth.router.js'
@@ -10,6 +11,7 @@ const PORT = 3019;
 
 app.use(bodyParser.json());
 app.use(express.json());
+app.use(cookieParser());
 app.use(errorHandlingMiddleware); 
 
 app.use('/users', userRouter);

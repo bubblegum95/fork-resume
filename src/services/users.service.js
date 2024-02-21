@@ -1,14 +1,18 @@
-import {UsersRepository} from "../repositories/users.repository.js"
+//import {UsersRepository} from "../repositories/users.repository.js"
 
 export class UsersService {
-  usersRepository = new UsersRepository; 
+  //usersRepository = new UsersRepository;
+  constructor(usersRepository) {
+    this.usersRepository = usersRepository; 
+  }
 
   findUser = async (email) => {
-    const foundUser = await this.usersRepository.findUser(email); // where: email
-    
-    return { // email
+
+    const foundUser = await this.usersRepository.findUser(email);
+
+    return foundUser?{ 
       email: foundUser.email,
-    }
+    }:null
   }
 
   createUser = async (email, password, name, grade) => {
@@ -44,6 +48,7 @@ export class UsersService {
     )
     
     return {
+      userId: user.userId,
       email: user.email, 
       password: user.password
     }

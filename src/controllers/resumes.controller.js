@@ -1,6 +1,9 @@
-import {ResumesService} from '../services/resumes.service.js'
+//import {ResumesService} from '../services/resumes.service.js'
 export class ResumesController {
-  resumesService = new ResumesService(); 
+  //resumesService = new ResumesService();
+  constructor(resumesService){
+    this.resumesService = resumesService; 
+  }
 
   getResumes = async(req, res, next) =>{
     try {
@@ -26,7 +29,7 @@ export class ResumesController {
       return res.json({data: resumes});
 
     } catch (error) {
-      next(); 
+      next(error); 
     }
   }
 
@@ -49,7 +52,7 @@ export class ResumesController {
 
       return res.status(200).json({data: resume});
     } catch (error) {
-      next(); 
+      next(error); 
     }
   }
 
@@ -77,7 +80,7 @@ export class ResumesController {
     
       return res.status(201).json({data: resume});
     } catch (error) {
-      next(); 
+      next(error); 
     }
   }
 
@@ -143,7 +146,7 @@ export class ResumesController {
       return res.status(201).json({data: patchResume});
 
     } catch(error) {
-      next();
+      next(error);
     }
   }
 
@@ -178,7 +181,7 @@ export class ResumesController {
     
       return res.status(201).json({message: "이력서를 삭제하였습니다."});
     } catch(error) {
-      next();
+      next(error);
     }
   
   }

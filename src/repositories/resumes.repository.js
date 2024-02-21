@@ -1,10 +1,13 @@
-import {PrismaClient} from '@prisma/client'; 
-
-const prisma = new PrismaClient();
+//import {PrismaClient} from '@prisma/client'; 
+//const prisma = new PrismaClient();
 
 export class ResumesRepository {
-  findResumes = async () => {
-    const resumes = await prisma.resumes.findMany({
+  constructor(prisma){
+    this.prisma = prisma; 
+  }
+
+  findResumes = async (orderKey, orderValue) => {
+    const resumes = await this.prisma.resumes.findMany({
       select: {
         resumeId: true,
         title: true, 
@@ -17,7 +20,7 @@ export class ResumesRepository {
         createdAt: true,
       },
       orderBy: {
-        [orderKey]: orderValue.toLowerCase(),
+        [orderKey]: orderValue,
       }
     })
 
@@ -25,7 +28,7 @@ export class ResumesRepository {
   }
 
   findResume = async (resumeId) => {
-    const resume = await prisma.resumes.findFirst({
+    const resume = await this.prisma.resumes.findFirst({
       where: {
         resumeId: +resumeId,
       },
@@ -46,7 +49,7 @@ export class ResumesRepository {
   }
 
   createResume = async (userId, title, content) => {
-    const resume = prisma.resumes.create({
+    const resume = this.prisma.resumes.create({
       data: {
         title, 
         content, 
@@ -59,7 +62,7 @@ export class ResumesRepository {
   }
 
   updateResume = async (resumeId, title, content, status) => {
-    const resume = prisma.resumes.update({
+    const resume = this.prisma.resumes.update({
       where: {
         resumeId: Number(resumeId), 
       }, 
@@ -74,7 +77,7 @@ export class ResumesRepository {
   }
 
   deleteResume = async (resumeId) => {
-    const resume = prisma.resumes.delete({
+    const resume = this.prisma.resumes.delete({
       where: {
         resumeId: Number(resumeId),
       }, 
