@@ -5,70 +5,80 @@ export class ResumesService {
     this.resumesRepository = resumesRepository;
   } 
 
-  findResumes = async () => {
-    const foundResumes = await this.resumesRepository.findResumes(); 
+  findResumes = async (orderKey, orderValue) => {
+    const foundResumes = await this.resumesRepository.findResumes(orderKey, orderValue); 
 
-    return {
-      resumeId: foundResumes.resumeId, 
-      title: foundResumes.title,
-      content: foundResumes.content,
-      name: foundResumes.name,
-      status: foundResumes.status,
-      createdAt: foundResumes.createdAt,
-    }; 
+    return foundResumes.map((e)=>{
+      return {
+        resumeId: e.resumeId,
+        title: e.title,
+        content: e.content, 
+        name: e.user.name,
+        status: e.status,
+        createdAt: e.createdAt,
+      }
+    })
   }
 
   findResume = async (resumeId) => {
     const foundResume = await this.resumesRepository.findResume(resumeId); 
   
-    return {
-      resumeId: foundResume.resumeId, 
-      title: foundResume.title,
-      content: foundResume.content,
-      name: foundResume.name,
-      status: foundResume.status,
-      createdAt: foundResume.createdAt,
-    }; 
+    return foundResume.map((e)=>{
+      return {
+        resumeId: e.resumeId,
+        title: e.title,
+        content: e.content, 
+        name: e.user.name,
+        status: e.status,
+        createdAt: e.createdAt,
+      }
+    })
   }
 
   createResume = async (userId, title, content) => {
     const createdResume = await this.resumesRepository.createResume(userId, title, content); 
 
-    return {
-      resumeId: createdResume.resumeId, 
-      title: createdResume.title, 
-      content: createdResume.content, 
-      name: createdResume.name,
-      status: createdResume.status,
-      createdAt: createdResume.createdAt, 
-    }
+    return createdResume.map((e)=>{
+      return {
+        resumeId: e.resumeId,
+        title: e.title,
+        content: e.content, 
+        name: e.user.name,
+        status: e.status,
+        createdAt: e.createdAt,
+      }
+    })
   }
 
   updateResume = async (resumeId, title, content, status) => {
     const updatedResume = await this.resumesRepository.updateResume(resumeId, title, content, status); 
 
-    return {
-      resumeId: updatedResume.resumeId, 
-      title: updatedResume.title, 
-      content: updatedResume.content, 
-      name: updatedResume.name,
-      status: updatedResume.status,
-      createdAt: updatedResume.createdAt, 
-    }; 
+    return updatedResume.map((e)=>{
+      return {
+        resumeId: e.resumeId,
+        title: e.title,
+        content: e.content, 
+        name: e.user.name,
+        status: e.status,
+        createdAt: e.createdAt,
+      }
+    })
   }
 
   deleteResume = async (resumeId) => {
-    const resume = await this. resumesRepository.findResume(resumeId); 
+    const deleteResume = await this. resumesRepository.findResume(resumeId); 
 
     await this.resumesRepository.deleteResume(resumeId); 
     
-    return {
-      resumeId: resume.resumeId, 
-      title: resume.title, 
-      content: resume.content, 
-      name: resume.name,
-      status: resume.status,
-      createdAt: resume.createdAt, 
-    }; 
+    return deleteResume.map((e)=>{
+      return {
+        resumeId: e.resumeId,
+        title: e.title,
+        content: e.content, 
+        name: e.user.name,
+        status: e.status,
+        createdAt: e.createdAt,
+      }
+    })
   }
 }; 

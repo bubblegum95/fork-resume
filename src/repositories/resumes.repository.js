@@ -1,5 +1,6 @@
 //import {PrismaClient} from '@prisma/client'; 
 //const prisma = new PrismaClient();
+//import {dataSource} from "../typeorm";
 
 export class ResumesRepository {
   constructor(prisma){
@@ -12,6 +13,7 @@ export class ResumesRepository {
         resumeId: true,
         title: true, 
         content: true,
+        status: true,
         user: {
           select: {
             name: true,
@@ -36,6 +38,7 @@ export class ResumesRepository {
         resumeId: true,
         title: true, 
         content: true,
+        status: true,
         user: {
           select: {
             name: true,

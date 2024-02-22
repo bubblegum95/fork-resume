@@ -24,7 +24,7 @@ export class ResumesController {
         })
       }
     
-      const resumes = await this.resumesService.findResumes(); 
+      const resumes = await this.resumesService.findResumes(orderKey, orderValue); 
     
       return res.json({data: resumes});
 
